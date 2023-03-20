@@ -72,3 +72,30 @@ $('.permbutton').click( function( e ) {
 
 // ---- Assign unique ids to everything that doesn't have an ID ----
 $('#html-loc').find('*').uniqueId() 
+
+let effective_container = define_new_effective_permissions("eff-container", true, null);
+$('#sidepanel').append(effective_container);
+
+$('#eff-container').attr('filepath', '/C/presentation_documents/important_file.txt')
+
+let user_select_field = define_new_user_select_field("user-select-field", "select", function(selected_user) {
+    $('#eff-container').attr('username', selected_user)
+
+ });
+$('#sidepanel').append(user_select_field);
+
+let trav_exec = define_new_dialog("new-dialog", "Description");
+
+$('.perm_info').click(function(){
+   trav_exec.dialog("open");
+   my_file_obj_var = path_to_file[$('#eff-container').attr('filepath')];
+   user_obj = all_users[$('#eff-container').attr('username')]
+   let user_action = allow_user_action(my_file_obj_var, user_obj, $(this).attr("permission_name"), true);
+   let explain = get_explanation_text(user_action);
+   trav_exec.append(explain)
+});
+
+$('.ui-icon-closethick').click(function(){
+    trav_exec.empty();
+    trav_exec.dialog("close");
+})
